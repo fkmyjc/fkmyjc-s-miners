@@ -1,0 +1,15 @@
+{
+  "_comment": "测试多方块机器的简单结构（layers[0]=顶层，layers[1]=底层/控制器层）。X=铁存储块外壳, M=金存储块核心(顶层中心), C=测试机器控制器(底层中心)。KubeJS 覆盖：kubejs/data/fkmyjcs_miners/multiblock/test_machine.json",
+  "id": "fkmyjcs_miners:test_machine",
+  "name": "测试机器",
+  "controller": "C",
+  "layers": [
+    ["XXX", "XMX", "XXX"],
+    ["XXX", "XCX", "XXX"]
+  ],
+  "mapping": {
+    "X": "#forge:storage_blocks/iron",
+    "M": "#forge:storage_blocks/gold",
+    "C": "fkmyjcs_miners:test_machine"
+  }
+}

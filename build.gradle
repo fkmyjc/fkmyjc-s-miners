@@ -1,0 +1,283 @@
+buildscript {
+    repositories {
+        // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+    }
+}
+
+plugins {
+    id 'eclipse'
+    id 'idea'
+    id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
+}
+
+apply plugin: 'org.spongepowered.mixin'
+
+group = mod_group_id
+version = mod_version
+
+base {
+    archivesName = mod_id
+}
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(17)
+}
+
+minecraft {
+    // The mappings can be changed at any time and must be in the following format.
+    // Channel:   Version:
+    // official   MCVersion             Official field/method names from Mojang mapping files
+    // parchment  YYYY.MM.DD-MCVersion  Open community-sourced parameter names and javadoc layered on top of official
+    //
+    // You must be aware of the Mojang license when using the official or "parchment" mappings.
+    // See more information here: https://github.com/MinecraftForge/MCPConfig/blob/master/Mojang.md
+    //
+    // Parchment is an unofficial project maintained by ParchmentMC, separate from MinecraftForge
+    // Additional setup is needed to use Parchment mappings: https://parchmentmc/docs/getting-started
+    //
+    // Use non-default mappings at your own risk. They may not always work.
+    // Simply re-run your setup task after changing the mappings to update your workspace.
+    mappings channel: mapping_channel, version: mapping_version
+
+    // When true, this property will have all Eclipse/IntelliJ IDEA run configurations run the "prepareX" task for the given run configuration before launching the game.
+    // In most cases, it is not necessary to enable.
+    // enableEclipsePrepareRuns = true
+    // enableIdeaPrepareRuns = true
+
+    // This property allows configuring Gradle's ProcessResources task(s) to run on IDE output locations before launching the game.
+    // It is REQUIRED to be set to true for this template to function.
+    // See https://docs.gradle.com/current/dsl/org.gradle.language.java.tasks.ProcessResources.html
+    copyIdeResources = true
+
+    // When true, this property will add the folder name of all declared run configurations to generated IDE run configurations.
+    // The folder name can be set on a run configuration using the "folderName" property.
+    // By default, the folder name of the Gradle project containing it will be used.
+    // generateRunFolders = true
+
+    // This property enables access transformers for use in development.
+    // They will be applied to the Minecraft artifact.
+    // The access transformer can be anywhere in the project.
+    // However, it must be at "META-INF/accesstransformer.cfg" in the final mod jar to be loaded by Forge.
+    // This default location is a best practice to automatically put the right file in place.
+    // See https://docs.minecraftforge.net/en/latest/advanced/accesstransformers/ for more information.
+    // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+
+    // Default run configurations.
+    // These can be tweaked, removed, or duplicated as needed.
+    runs {
+        // applies to all the run configs below
+        configureEach {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            // The markers can be added/remove as needed separated by commas.
+            // "SCAN": For mods scan.
+            // "REGISTRIES": For firing of registry events.
+            // "REGISTRYDUMP": For getting the contents of all registries.
+            property 'forge.logging.markers', 'REGISTRIES'
+
+
+            // Recommended logging level for the console
+            // You can set different levels here.
+            // Please read here: https://stackoverflow.com/questions/2031163/for-changing-the-log-level
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                "${mod_id}" {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        client {
+            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            property 'forge.enabledGameTestNamespaces', mod_id
+
+            // EMI (dev-time only) needs its refmap remapped from SRG -> Mojmap.
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+        }
+
+        server {
+            property 'forge.enabledGameTestNamespaces', mod_id
+            args '--nogui'
+        }
+
+        // This run config launches GameTestServer and runs all registered gametests, then exits.
+        // By default, the server will crash if no gametests are provided.
+        // The gametest system is also enabled by default for other run configs under the /test command.
+        gameTestServer {
+            property 'forge.enabledGameTestNamespaces', mod_id
+        }
+
+        data {
+            // example of overriding the working directory set in configureEach above
+            workingDirectory project.file('run-data')
+
+            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
+            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+        }
+    }
+}
+
+mixin {
+    add sourceSets.main, "${mod_id}.refmap.json"
+
+    config "${mod_id}.mixins.json"
+}
+
+// Include resources generated by data generators.
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+repositories {
+    // Put repositories for dependencies here
+    // ForgeGradle automatically adds the Forge maven and Maven Central for you
+
+    // JEI (BlameJared)
+    maven { url = 'https://maven.blamejared.com' }
+    // REI + Cloth Config (shedaniel)
+    maven { url = 'https://maven.shedaniel.me' }
+    // Architectury (its own maven — NOT on shedaniel's)
+    maven { url = 'https://maven.architectury.dev/' }
+    // EMI (TerraformersMC)
+    maven { url = 'https://maven.terraformersmc.com/' }
+
+    // Jade (Snownee) — CurseMaven hosts the canonical Forge artifact for 1.20.1.
+    // CurseMaven is the documented source that works with ForgeGradle's fg.deobf().
+    maven { url = 'https://www.cursemaven.com' }
+
+    // Applied Energistics 2 — official maven (modmaven) hosts the deobf-able forge artifact.
+    maven { url = 'https://modmaven.dev' }
+
+    // If you have mod jar dependencies in ./libs, you can declare them as a repository like so.
+    // See https://docs.gradle.com/current/userguide/declaring_repositories.html#flat_dir_resolver
+    // flatDir {
+    //     dir 'libs'
+    // }
+}
+
+dependencies {
+    // Specify the version of Minecraft to use.
+    // Any artifact can be supplied so long as it has a "userdev" classifier artifact and is a compatible patcher artifact.
+    // The "userdev" classifier will be requested and setup by ForgeGradle.
+    // If the group id is "net.minecraft" and the artifact id is one of ["client", "server", "joined"],
+    // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+
+    // ===== Integration support libraries (JEI / REI / EMI) — OPTIONAL =====
+    // These are *soft* (optional) integrations: the mod MUST load and run fine
+    // even when JEI / REI / EMI are NOT installed.
+    //   compileOnly  -> our code links against their APIs (NOT shaded into our jar)
+    //   runtimeOnly  -> present in our DEV run configs so we can locally test the
+    //                   preview tab. Nothing is bundled into the released jar, and
+    //                   this does NOT force the mod on players.
+    // The authoritative "optional" flag for players lives in META-INF/mods.toml
+    // (mandatory = false for jei / roughlyenoughitems / emi).
+    // NOTE: ForgeGradle 6.0.x does not expose modRuntimeOnly(); runtimeOnly is the
+    // correct config here.
+    // Versions live in gradle.properties.
+
+    // JEI: the "-api" classifier jar is essentially empty for 1.20.1 (it only ships
+    // forge helper types); the plugin API (JeiPlugin / IModPlugin / registration) lives
+    // in the full jar, so compile against that.
+    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
+    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
+
+    // REI: single jar contains both API and implementation.
+    compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-forge:${rei_version}")
+    runtimeOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-forge:${rei_version}")
+
+    // EMI: ":api" classifier for compile, full jar for dev runtime.
+    compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}:api")
+    runtimeOnly fg.deobf("dev.emi:emi-forge:${emi_version}")
+
+    // REI's own runtime deps — only needed so REI loads inside our DEV run.
+    // NOTE: architectury-forge MUST be the 9.x line (dev.architectury package),
+    // matching what REI 12.1.785 was built against. architectury 9.x is already
+    // published with *official* (Mojmap) MC names, so it needs NO remapping and
+    // is used here as a plain dependency (NOT fg.deobf, which would otherwise try
+    // to regenerate a deobf artifact it cannot fetch in this setup). 9.x also
+    // keeps the `dev.architectury` package that REI's EntryStacks API references.
+    runtimeOnly "dev.architectury:architectury-forge:${architectury_version}"
+    runtimeOnly fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}")
+
+    // REI bundles the `me.shedaniel.math` package (e.g. Rectangle) inside
+    // cloth-config; REI's DisplayCategory.setupDisplay signature needs
+    // me.shedaniel.math.Rectangle at COMPILE time. Pull cloth-config into
+    // compileOnly too. compileOnly => not shaded into the released jar, and
+    // at runtime REI/cloth-config already supply the same classes.
+    compileOnly fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}")
+
+    // architectury-forge must also be on the COMPILE classpath: REI's
+    // EntryStacks API signatures reference dev.architectury.fluid.FluidStack,
+    // which javac needs to resolve even when we only call the ItemStack overload.
+    compileOnly "dev.architectury:architectury-forge:${architectury_version}"
+
+    // ===== Jade (optional, client) — show multiblock formation status in the look-at tooltip =====
+    // Maven coordinate = the Modrinth artifact for Jade 11.13.1+forge (MC 1.20.1).
+    // compileOnly => our plugin links against Jade's API but it is NOT shaded into our jar.
+    // runtimeOnly => present only in our DEV run configs so we can locally test the tooltip.
+    // Nothing is bundled into the released jar, and this does NOT force Jade on players.
+    // The authoritative "optional" flag lives in META-INF/mods.toml (jade, mandatory = false, side = CLIENT).
+    // NOTE: ForgeGradle 6.0.x has no modRuntimeOnly(); runtimeOnly is the correct config here.
+    compileOnly fg.deobf("curse.maven:jade-324717:${jade_version}")
+    runtimeOnly fg.deobf("curse.maven:jade-324717:${jade_version}")
+
+    // ===== Applied Energistics 2 (optional, client) =====
+    // Enables our JEI recipe-transfer handler for the ME Pattern Encoding Terminal:
+    // pressing "+" over a multiblock preview writes the structure's materials into a pattern
+    // (when a material has candidates, the first candidate is chosen).
+    // compileOnly => links against AE2's API (PatternEncodingTermMenu / EncodingHelper /
+    //                GenericStack / AEItemKey) but is NOT shaded into our jar.
+    // No runtimeOnly: AE2 is a heavy mod; we don't force it into the DEV run. The handler
+    // is guarded by ModList.isLoaded("ae2") so the mod runs fine with or without AE2.
+    // The authoritative "optional" flag for players lives in META-INF/mods.toml (ae2).
+    compileOnly fg.deobf("appeng:appliedenergistics2-forge:${ae2_version}")
+
+}
+
+// This block of code expands all declared replace properties in the specified resource targets.
+// A missing property will result in an error. Properties are expanded using ${} Groovy notation.
+// When "copyIdeResources" is enabled, this will also run before the game launches in IDE environments.
+// See https://docs.gradle.com/current/dsl/org.gradle.language.java.tasks.ProcessResources.html
+tasks.named('processResources', ProcessResources).configure {
+    var replaceProperties = [minecraft_version   : minecraft_version, minecraft_version_range: minecraft_version_range,
+                             forge_version       : forge_version, forge_version_range: forge_version_range,
+                             loader_version_range: loader_version_range,
+                             mod_id              : mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
+                             mod_authors         : mod_authors, mod_description: mod_description,]
+
+    inputs.properties replaceProperties
+
+    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+        expand replaceProperties + [project: project]
+    }
+}
+
+// Example for how to get properties into the manifest for reading at runtime.
+tasks.named('jar', Jar).configure {
+    manifest {
+        attributes(["Specification-Title"     : mod_id,
+                    "Specification-Vendor"    : mod_authors,
+                    "Specification-Version"   : "1", // Version 1
+                    "Implementation-Title"    : project.name,
+                    "Implementation-Version"  : mod_version,
+                    "Implementation-Vendor"   : mod_authors,
+                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")])
+    }
+
+    // ReobfJar task is used by Forge to apply the SRG mappings to your built jar.
+    // In developer environments, this is called when running the "buildGradle" task.
+    finalizedBy 'reobfJar'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}

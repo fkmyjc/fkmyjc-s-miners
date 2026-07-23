@@ -1,0 +1,11 @@
+{
+  "dimension": "minecraft:the_nether",
+  "normal": [
+    "minecraft:nether_quartz_ore",
+    "minecraft:nether_gold_ore",
+    "minecraft:ancient_debris"
+  ],
+  "rock": [
+    "minecraft:netherrack"
+  ]
+}

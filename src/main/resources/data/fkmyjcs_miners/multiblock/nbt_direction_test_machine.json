@@ -1,0 +1,17 @@
+{
+  "_comment": "演示两项新能力：(1) bindDirection=false —— 校验时遍历控制器四个水平朝向，任一成形即成立；(2) 带 NBT 的方块 —— D 为带 {Lock:\"secret\"} 的箱子且 writeNbt=true，自动建造时把 NBT 写入方块实体；M 为候选组。控制器 C 须为 fkmyjcs_miners:test_machine（已注册，复用即可，无需改注册表）。",
+  "id": "fkmyjcs_miners:nbt_direction_test_machine",
+  "name": "NBT与方向测试机器",
+  "controller": "C",
+  "bindDirection": false,
+  "layers": [
+    ["XDX", "DMD", "XDX"],
+    ["XXX", "XCX", "XXX"]
+  ],
+  "mapping": {
+    "X": "#forge:storage_blocks/iron",
+    "M": ["#forge:storage_blocks/gold", "#forge:storage_blocks/diamond", "minecraft:emerald_block"],
+    "D": {"id": "minecraft:chest", "nbt": "{Lock:\"secret\"}", "writeNbt": true},
+    "C": "fkmyjcs_miners:test_machine"
+  }
+}

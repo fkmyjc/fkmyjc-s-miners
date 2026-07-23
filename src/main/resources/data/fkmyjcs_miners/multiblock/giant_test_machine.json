@@ -1,0 +1,63 @@
+{
+  "_comment": "巨型测试多方块结构（约 515 方块）。layers[0]=最底层（最宽 15x15），layers[最后]=顶层（11x11，控制器 C 居中）。所有层共用 15x15 外框，控制器在中心(7,7)，每层用空格(SKIP)雕刻出居中的较小足迹，形成台阶金字塔。KubeJS 覆盖：kubejs/data/fkmyjcs_miners/multiblock/giant_test_machine.json",
+  "id": "fkmyjcs_miners:giant_test_machine",
+  "name": "巨型测试机器",
+  "controller": "C",
+  "layers": [
+    [
+      "XXXXXXXXXXXXXXX",
+      "XXXXXXXXXXXXXXX",
+      "XXXXXXXXXXXXXXX",
+      "XXXXXXXXXXXXXXX",
+      "XXXXXXXXXXXXXXX",
+      "XXXXXXXXXXXXXXX",
+      "XXXXXXXXXXXXXXX",
+      "XXXXXXXXXXXXXXX",
+      "XXXXXXXXXXXXXXX",
+      "XXXXXXXXXXXXXXX",
+      "XXXXXXXXXXXXXXX",
+      "XXXXXXXXXXXXXXX",
+      "XXXXXXXXXXXXXXX",
+      "XXXXXXXXXXXXXXX",
+      "XXXXXXXXXXXXXXX"
+    ],
+    [
+      "               ",
+      " XXXXXXXXXXXXX ",
+      " XXXXXXXXXXXXX ",
+      " XXXXXXXXXXXXX ",
+      " XXXXXXXXXXXXX ",
+      " XXXXXXXXXXXXX ",
+      " XXXXXXXXXXXXX ",
+      " XXXXXXXXXXXXX ",
+      " XXXXXXXXXXXXX ",
+      " XXXXXXXXXXXXX ",
+      " XXXXXXXXXXXXX ",
+      " XXXXXXXXXXXXX ",
+      " XXXXXXXXXXXXX ",
+      " XXXXXXXXXXXXX ",
+      "               "
+    ],
+    [
+      "               ",
+      "               ",
+      "  XXXXXXXXXXX  ",
+      "  XXXXXXXXXXX  ",
+      "  XXXXXXXXXXX  ",
+      "  XXXXXXXXXXX  ",
+      "  XXXXXXXXXXX  ",
+      "  XXXXXCXXXXX  ",
+      "  XXXXXXXXXXX  ",
+      "  XXXXXXXXXXX  ",
+      "  XXXXXXXXXXX  ",
+      "  XXXXXXXXXXX  ",
+      "  XXXXXXXXXXX  ",
+      "               ",
+      "               "
+    ]
+  ],
+  "mapping": {
+    "X": "#forge:storage_blocks/iron",
+    "C": "fkmyjcs_miners:giant_test_machine"
+  }
+}

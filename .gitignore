@@ -1,0 +1,35 @@
+# ===== Gradle / 构建产物 =====
+build/
+.gradle/
+**/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# ===== IDE（IntelliJ / Eclipse）=====
+.idea/
+*.iml
+*.ipr
+*.iws
+.project
+.classpath
+.bin/
+
+# ===== Minecraft / Forge 运行时数据（含世界、玩家数据，勿提交）=====
+run/
+run-data/
+logs/
+*.log
+compile_log.txt
+test_log.txt
+
+# ===== 本地配置（可能含个人路径/密钥）=====
+local.properties
+
+# ===== 操作系统 =====
+.DS_Store
+Thumbs.db
+
+# ===== 编译产物 =====
+*.class
+
+# ===== 数据生成产物（Forge 可重新生成，按需决定是否提交）=====
+# src/generated/

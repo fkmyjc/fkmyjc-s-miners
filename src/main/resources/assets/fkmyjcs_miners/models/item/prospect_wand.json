@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "fkmyjcs_miners:item/prospect_wand"
+  }
+}

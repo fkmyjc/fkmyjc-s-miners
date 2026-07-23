@@ -1,0 +1,16 @@
+{
+  "_comment": "候选组校验测试结构。核心 M 与四角装饰 B 为候选组：世界方块只要落在候选组内任一个即算成形。用于验证 MultiBlockPattern 的候选组匹配（matches -> blockMatches 遍历候选，任一匹配即通过）。控制器 C 须为 fkmyjcs_miners:test_machine。",
+  "id": "fkmyjcs_miners:candidate_test_machine",
+  "name": "候选组测试机器",
+  "controller": "C",
+  "layers": [
+    ["XBX", "BMB", "XBX"],
+    ["XXX", "XCX", "XXX"]
+  ],
+  "mapping": {
+    "X": "#forge:storage_blocks/iron",
+    "M": ["#forge:storage_blocks/gold", "#forge:storage_blocks/diamond", "minecraft:emerald_block"],
+    "B": ["#forge:chests", "minecraft:obsidian"],
+    "C": "fkmyjcs_miners:test_machine"
+  }
+}

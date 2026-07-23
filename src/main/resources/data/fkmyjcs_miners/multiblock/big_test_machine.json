@@ -1,0 +1,17 @@
+{
+  "_comment": "更大的测试多方块结构（layers[0]=顶层，layers[最后]=底层/控制器层）。倒金字塔：顶层7x7、中间5x5、3x3、底层1x1控制器。每行字符数一致对齐。KubeJS 覆盖：kubejs/data/fkmyjcs_miners/multiblock/big_test_machine.json",
+  "id": "fkmyjcs_miners:big_test_machine",
+  "name": "大型测试机器",
+  "controller": "C",
+  "layers": [
+    ["XXXXXXX", "XMMMMMX", "XMMMMMX", "XMMMMMX", "XMMMMMX", "XMMMMMX", "XXXXXXX"],
+    ["       "," XXXXX ", " XMMMX ", " XMMMX ", " XMMMX ", " XXXXX ","       "],
+    ["       ","       ","  XXX  ", "  XMX  ", "  XXX  ","       ","       "],
+    ["","","","   C   ","","",""]
+  ],
+  "mapping": {
+    "X": "#forge:storage_blocks/iron",
+    "M": "#forge:storage_blocks/gold",
+    "C": "fkmyjcs_miners:big_test_machine"
+  }
+}

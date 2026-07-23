@@ -1,0 +1,7 @@
+{
+  "dimension": "minecraft:the_end",
+  "normal": [],
+  "rock": [
+    "minecraft:end_stone"
+  ]
+}

@@ -1,0 +1,1 @@
+{"variants": {"facing=north": {"model": "fkmyjcs_miners:block/test_machine"}, "facing=south": {"model": "fkmyjcs_miners:block/test_machine", "y": 180}, "facing=west": {"model": "fkmyjcs_miners:block/test_machine", "y": 270}, "facing=east": {"model": "fkmyjcs_miners:block/test_machine", "y": 90}}}
