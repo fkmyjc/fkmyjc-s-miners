@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraft.resources.ResourceKey;
@@ -79,10 +80,27 @@ public final class OreListManager {
         if (r != null) EXTRA_ORES.remove(r);
     }
 
+    /**
+     * 注册「依赖特定 mod 才存在的矿石/存储块」到额外矿石集合。
+     * 在 {@link #init()} 内、{@link #buildOreList()} 之前调用（此时 FMLLoadComplete 已就绪，ModList 可用）。
+     * 与静态块里默认加入的 {@code minecraft:ancient_debris} 同一思路 —— 把无法被 #forge:ores 自动筛查、
+     * 但需显式纳入矿石池的方块集中登记；仅当对应 mod 已加载时才加入。
+     * 加入后这些方块会自然流入「矿脉 map + 另外两个表 + 输出保存」的统一管线，与远古残骸一致。
+     */
+    private static void registerModPresetOres() {
+        if (ModList.get().isLoaded("mekanism")) {
+            addExtraOre("mekanism:block_salt");
+        }
+        if (ModList.get().isLoaded("ae2")) {
+            addExtraOre("ae2:quartz_block");
+        }
+    }
+
     private OreListManager() {}
 
     public static void init() {
         // ★ 每次进入实例都重新生成矿石列表并覆盖落盘文件，不读取旧缓存
+        registerModPresetOres();
         generateAndSave();
     }
 

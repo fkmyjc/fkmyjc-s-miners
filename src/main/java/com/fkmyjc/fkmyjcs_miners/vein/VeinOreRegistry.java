@@ -197,6 +197,8 @@ public enum VeinOreRegistry implements ResourceManagerReloadListener {
         ORE_COLOR.put(rl("mekanism", "lead_ore"),     0xFF45505A);
         ORE_COLOR.put(rl("mekanism", "uranium_ore"),  0xFFB0E000);
         ORE_COLOR.put(rl("mekanism", "fluorite_ore"), 0xFFF26DA4);
+        //  存储块（预设矿物表：经 OreListManager.EXTRA_ORES 加入矿石池的盐块）
+        ORE_COLOR.put(rl("mekanism", "block_salt"),    0xFFEFEFE8);
 
         // —— Thermal（thermal:）——
         ORE_COLOR.put(rl("thermal", "copper_ore"),    0xFFB4684D);
@@ -225,6 +227,8 @@ public enum VeinOreRegistry implements ResourceManagerReloadListener {
         // —— AE2（ae2:）——
         ORE_COLOR.put(rl("ae2", "certus_quartz_ore"),        0xFF3FC9D6);
         ORE_COLOR.put(rl("ae2", "charged_certus_quartz_ore"),0xFF6FE9E9);
+        //  存储块（预设矿物表：经 OreListManager.EXTRA_ORES 加入矿石池的赛特斯石英块）
+        ORE_COLOR.put(rl("ae2", "quartz_block"),          0xFF8FD8E0);
 
         // —— Ad Astra（ad_astra:）推断色 ——
         ORE_COLOR.put(rl("ad_astra", "desh_ore"),    0xFFB5462E);
